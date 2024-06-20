@@ -15,7 +15,7 @@ function App() {
       <header className="App-header">
         <h1>{message}</h1>
         <p>Learn React</p>
-        <p>uodate 2</p>
+        <p>update 3</p>
       </header>
     </div>
   );
