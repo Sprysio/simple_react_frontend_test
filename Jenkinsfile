@@ -22,8 +22,7 @@ pipeline {
                 sh '''
                 cd simple-frontend
                 npm --version
-                npm start
-                curl -f http://localhost:3000/
+                npm test
                 '''
             }
         }

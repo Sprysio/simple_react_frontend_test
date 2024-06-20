@@ -5,11 +5,11 @@ RUN apk add --update curl && \
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY simple-frontend/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY /simple-frontend .
      
 EXPOSE 3000
 
