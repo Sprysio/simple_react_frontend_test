@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine AS build
 
 RUN apk add --update curl && \
     rm -rf /var/cache/apk/*
@@ -11,10 +11,16 @@ RUN npm install
 
 COPY /simple-frontend .
      
-EXPOSE 3000
-
-HEALTHCHECK --interval=10s --timeout=30s \
-     --retries=3 CMD curl -f http://localhost:3000|| exit 1
+RUN npm run build
 
 
-CMD ["sh", "-c", "npm start"]
+
+FROM nginx:stable-alpine
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
