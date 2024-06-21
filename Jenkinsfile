@@ -53,9 +53,11 @@ pipeline {
             steps{
                 echo 'Clone development repo'
                 dir("/tmp/repo_b") {
-                    git branch: 'main',
-                    credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
-                    url: 'https://github.com/Sprysio/simple-development-test2.git'
+                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_KEY')]) {
+                        sh '''
+                        ssh-agent sh -c 'ssh-add ${SSH_KEY}; git clone -b main git@github.com:Sprysio/simple-development-test2.git .'
+                        '''
+                    }
              } 
             }
         }
@@ -73,7 +75,6 @@ pipeline {
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh '''
-                    git remote add origin https://Sprysio:${Password}@github.com/Sprysio/simple-development-test2.git
                     #git config user.email "99020634+Sprysio@users.noreply.github.com"
                     #git config user.name "Sprysio"
                     git checkout -b jenkins_branch_${BUILD_ID}
