@@ -16,6 +16,7 @@ function App() {
         <h1>{message}</h1>
         <p>Learn React</p>
         <p>docker compose up -d --build --pull always</p>
+        <p>test 1</p>
       </header>
     </div>
   );
