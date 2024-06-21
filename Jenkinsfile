@@ -77,7 +77,6 @@ pipeline {
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh '''
-                    ssh-agent sh -c 'ssh-add ${SSH_KEY}; 
                     #git config user.email "99020634+Sprysio@users.noreply.github.com"
                     #git config user.name "Sprysio"
                     git checkout -b jenkins_branch_${BUILD_ID}
