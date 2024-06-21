@@ -55,6 +55,8 @@ pipeline {
                 dir("/tmp/repo_b") {
                      withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_KEY')]) {
                         sh '''
+                        mkdir -p ~/.ssh
+                        ssh-keyscan github.com >> ~/.ssh/known_hosts
                         ssh-agent sh -c 'ssh-add ${SSH_KEY}; git clone -b main git@github.com:Sprysio/simple-development-test2.git .'
                         '''
                     }
@@ -75,6 +77,7 @@ pipeline {
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh '''
+                    ssh-agent sh -c 'ssh-add ${SSH_KEY}; 
                     #git config user.email "99020634+Sprysio@users.noreply.github.com"
                     #git config user.name "Sprysio"
                     git checkout -b jenkins_branch_${BUILD_ID}
