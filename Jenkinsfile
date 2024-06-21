@@ -55,7 +55,7 @@ pipeline {
                 dir("/tmp/repo_b") {
                     git branch: 'main',
                     credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
-                    url: 'https://github.com/Sprysio/simple-development-test2.git'
+                    url: 'git@github.com/Sprysio/simple-development-test2.git'
              } 
             }
         }
@@ -73,8 +73,8 @@ pipeline {
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh ''' 
-                    git config user.email "99020634+Sprysio@users.noreply.github.com"
-                    git config user.name "Sprysio"
+                    #git config user.email "99020634+Sprysio@users.noreply.github.com"
+                    #git config user.name "Sprysio"
                     git checkout -b jenkins_branch_${BUILD_ID}
                     git add .
                     git commit -m "push to git"
