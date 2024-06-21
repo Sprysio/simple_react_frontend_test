@@ -73,9 +73,11 @@ pipeline {
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh ''' 
+                    git config user.email "99020634+Sprysio@users.noreply.github.com"
+                    git config user.name "${Username}"
                     git add .
                     git commit -m "push to git"
-                    git push origin jenkins_branch${BUILD_ID}
+                    git push origin jenkins_branch_${BUILD_ID}
                     '''
                  }
              }
