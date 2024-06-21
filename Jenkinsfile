@@ -75,7 +75,7 @@ pipeline {
                     dir("/tmp/repo_b") {
                  withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                    export GIT_SSH_COMMAND = "ssh -i $SSH_KEY"
+                    export GIT_SSH_COMMAND="ssh -i $SSH_KEY"
                     git config user.email "99020634+Sprysio@users.noreply.github.com"
                     git config user.name "Sprysio"
                     git checkout -b jenkins_branch_${BUILD_ID}
