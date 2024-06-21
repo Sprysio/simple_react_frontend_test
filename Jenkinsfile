@@ -67,7 +67,7 @@ pipeline {
         stage('Moving files'){
             steps{
                 echo 'moving files'
-                sh 'cp -r /home/jenkins/workspace/${JOB_NAME}/* /tmp/repo_b'
+                sh 'cp -r /home/jenkins/workspace/${JOB_NAME}/* /tmp/repo_b/${JOB_NAME}'
             }
         }
         stage('Push to Git'){
