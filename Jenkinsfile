@@ -74,7 +74,6 @@ pipeline {
                 echo 'pushing to github'
                     dir("/tmp/repo_b") {
                  withCredentials([sshUserPrivateKey(credentialsId: 'ssh-credentials-id', keyFileVariable: 'SSH_KEY')]) {
-                     {
                     sh '''
                     GIT_SSH_COMMAND = "ssh -i $SSH_KEY"
                     git config user.email "99020634+Sprysio@users.noreply.github.com"
