@@ -52,8 +52,8 @@ pipeline {
         stage('Clone development repo'){
             steps{
                 echo 'Clone development repo'
-                dir("/root/repo_b") {
-                    git branch: 'master',
+                dir("/tmp/repo_b") {
+                    git branch: 'main',
                     credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
                     url: 'https://github.com/Sprysio/simple-development-test2.git'
              } 
@@ -62,13 +62,13 @@ pipeline {
         stage('Moving files'){
             steps{
                 echo 'moving files'
-                sh 'cp /home/jenkins/workspace/${JOB_NAME} /root/repo_b'
+                sh 'cp -r /home/jenkins/workspace/${JOB_NAME}/* /tmp/repo_b'
             }
         }
         stage('Push to Git'){
             steps{
                 echo 'pushing to github'
-                    dir("/root/repo_b") {
+                    dir("/tmp/repo_b") {
                  withCredentials([usernamePassword(credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
