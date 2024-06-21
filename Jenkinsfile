@@ -54,6 +54,7 @@ pipeline {
                 echo 'Clone development repo'
                 dir("/root/repo_b") {
                     git branch: 'master',
+                    credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
                     url: 'https://github.com/Sprysio/simple-development-test2.git'
              } 
             }
@@ -68,7 +69,7 @@ pipeline {
             steps{
                 echo 'pushing to github'
                     dir("/root/repo_b") {
-                 withCredentials([usernamePassword(credentialsId: 'Innersource_Cred',
+                 withCredentials([usernamePassword(credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96',
                  usernameVariable: 'Username',
                  passwordVariable: 'Password')]) {
                     sh ''' 
