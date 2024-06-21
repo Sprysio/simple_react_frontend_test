@@ -25,7 +25,7 @@ pipeline {
                 npm test
                 '''
             }
-        }
+        }/*
         stage('Build image'){
             steps{
                 echo 'bulding docker image'
@@ -46,6 +46,38 @@ pipeline {
                 docker push sprysio/frontend_build:latest
                 '''
             }
+            }
+        }*/
+
+        stage('Clone development repo'){
+            steps{
+                echo 'Clone development repo'
+                dir("/root/repo_b") {
+                    git branch: 'master',
+                    url: 'https://github.com/Sprysio/simple-development-test2.git'
+             } 
+            }
+        }
+        stage('Moving files'){
+            steps{
+                echo 'moving files'
+                sh 'cp /home/jenkins/workspace/${JOB_NAME} /root/repo_b'
+            }
+        }
+        stage('Push to Git'){
+            steps{
+                echo 'pushing to github'
+                    dir("/root/repo_b") {
+                 withCredentials([usernamePassword(credentialsId: 'Innersource_Cred',
+                 usernameVariable: 'Username',
+                 passwordVariable: 'Password')]) {
+                    sh ''' 
+                    git add .
+                    git commit -m "push to git"
+                    git push origin jenkins_branch${BUILD_ID}
+                    '''
+                 }
+             }
             }
         }
     }
