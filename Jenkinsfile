@@ -7,20 +7,31 @@ pipeline {
       } 
       
     stages {
+        stage('Build') {
+            steps {
+                echo 'Building....'
+                sh '''
+                cd simple-frontend
+                npm install
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Testing.."
+                sh '''
+                cd simple-frontend
+                npm --version
+                npm test
+                '''
+            }
+        }
         stage('Build image'){
             steps{
                 echo 'bulding docker image'
                 sh ''' 
                 docker build -t sprysio/frontend_build:${BUILD_ID} .
                 docker tag sprysio/frontend_build:${BUILD_ID} sprysio/frontend_build:latest
-                '''
-            }
-        }
-        stage('Docker run'){
-            steps{
-                echo 'docker run'
-                sh '''
-                    docker run -p 3000:80 sprysio/frontend_build:${BUILD_ID} npm test
                 '''
             }
         }
@@ -34,10 +45,9 @@ pipeline {
                 docker push sprysio/frontend_build:${BUILD_ID} 
                 docker push sprysio/frontend_build:latest
                 '''
-            }
+                }
             }
         }
-
     }
     post{
         always {  
