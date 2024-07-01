@@ -69,41 +69,9 @@ pipeline {
          }  
          success {  
              echo 'This will run only if successful'  
-
-             script {
-                echo "script"
-                def branchName = env.CHANGE_BRANCH
-                def prNumber = env.CHANGE_ID
-               
-                if (branchName!=null && branchName.startsWith('feature/') && prNumber) {
-                    echo "Merging pull request #${prNumber} from branch ${branchName}"
-                    
-                    // Example using GitHub API to merge the pull request
-                    withCredentials([usernamePassword(credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                        sh """
-                        curl -X PUT -u ${GITHUB_USERNAME}:${GITHUB_PASSWORD} https://api.github.com/repos/Sprysio/simple_react_frontend_test/pulls/${prNumber}/merge
-                        """
-                    }
-                }
-             }
          }  
          failure {  
             echo 'This will run only if failure'  
-            script {
-                def branchName = env.CHANGE_BRANCH
-                def prNumber = env.CHANGE_ID
-
-                if (branchName!=null && branchName.startsWith('feature/') && prNumber) {
-                    echo "Failing pull request #${prNumber} from branch ${branchName}"
-                        withCredentials([usernamePassword(credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
-                        sh """
-                            curl -X PUT -u ${GITHUB_USERNAME}:${GITHUB_PASSWORD} https://api.github.com/repos/Sprysio/simple_react_frontend_test/issues/${prNumber}/comments -d '{"body": "Failed to merge pull request. Please check the CI logs for details."}'
-                        """
-
-                    }
-                }
-            }
-
              //mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sebastianfors123@tutanota.com";  
          }  
          unstable {  
