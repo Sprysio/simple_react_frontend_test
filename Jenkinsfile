@@ -9,8 +9,7 @@ pipeline {
     stages {
         stage('Build') {
             when{
-                    branch 'feature/*'  
-                  
+                changeRequest()
             }
             steps {
                 echo 'Building for pull request from branch'
@@ -22,8 +21,7 @@ pipeline {
         }
         stage('Test') {
             when{
-                    branch 'feature/*'  
-                  
+                changeRequest()    
             }
             steps {
                 echo "Testing for pull request from branch"
