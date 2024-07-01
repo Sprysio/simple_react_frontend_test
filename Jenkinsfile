@@ -15,19 +15,11 @@ pipeline {
                 }
             }
             steps {
-                script {
-                def branchName = env.CHANGE_BRANCH
-                    if (branchName.startsWith('feature/')) {
-                        echo 'Building for pull request from branch: ${branchName}'
-                        sh '''
-                        cd simple-frontend
-                        npm install
-                        '''
-                    } else {
-                        echo "Skipping tests for pull request from branch: ${branchName}"
-                    }
-                }
-                
+                echo 'Building for pull request from branch: ${branchName}'
+                sh '''
+                cd simple-frontend
+                npm install
+                '''
             }
         }
         stage('Test') {
@@ -38,21 +30,12 @@ pipeline {
                 }
             }
             steps {
-                script {
-                def branchName = env.CHANGE_BRANCH
-                    if (branchName.startsWith('feature/')) {
-                        echo "Testing for pull request from branch: ${branchName}"
-                        sh '''
-                        cd simple-frontend
-                        npm --version
-                        npm test
-                        '''
-                    } else {
-                        echo "Skipping tests for pull request from branch: ${branchName}"
-                    }
-                }
-
-                
+                echo "Testing for pull request from branch:"
+                sh '''
+                cd simple-frontend
+                npm --version
+                npm test
+                '''
             }
         }
         stage('Build image'){
@@ -95,8 +78,8 @@ pipeline {
                 echo "script"
                 def branchName = env.CHANGE_BRANCH
                 def prNumber = env.CHANGE_ID
-                echo "${branchName} xd"
-                if (branchName.startsWith('feature/') && prNumber) {
+               
+                if (branchName!=null && branchName.startsWith('feature/') && prNumber) {
                     echo "Merging pull request #${prNumber} from branch ${branchName}"
                     
                     // Example using GitHub API to merge the pull request
