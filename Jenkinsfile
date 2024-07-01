@@ -8,11 +8,8 @@ pipeline {
       
     stages {
         stage('Build') {
-            when{
-                allOf {
-                    branch 'feature/*'  
-                    changeRequest()
-                }
+            when{ 
+                changeRequest()
             }
             steps {
                 echo 'Building for pull request from branch: ${branchName}'
@@ -24,10 +21,7 @@ pipeline {
         }
         stage('Test') {
             when{
-                allOf {
-                    branch 'feature/*'  
-                    changeRequest()
-                }
+                changeRequest()
             }
             steps {
                 echo "Testing for pull request from branch:"
