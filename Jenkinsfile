@@ -92,9 +92,10 @@ pipeline {
              echo 'This will run only if successful'  
 
              script {
+                echo "script"
                 def branchName = env.CHANGE_BRANCH
                 def prNumber = env.CHANGE_ID
-                
+                echo "${branchName} xd"
                 if (branchName.startsWith('feature/') && prNumber) {
                     echo "Merging pull request #${prNumber} from branch ${branchName}"
                     
