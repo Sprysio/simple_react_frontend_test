@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             when{
                 allOf {
-                    branch '*/feature/*'  
+                    branch 'feature/*'  
                     changeRequest()
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
         stage('Test') {
             when{
                 allOf {
-                    branch '*/feature/*'  
+                    branch 'feature/*'  
                     changeRequest()
                 }
             }
