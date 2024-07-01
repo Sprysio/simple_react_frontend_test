@@ -9,13 +9,11 @@ pipeline {
     stages {
         stage('Build') {
             when{
-                allOf {
-                    branch 'feature/*'  
-                    changeRequest()
-                }
+                changeRequest()
+              
             }
             steps {
-                echo 'Building for pull request from branch: ${branchName}'
+                echo 'Building for pull request from branch'
                 sh '''
                 cd simple-frontend
                 npm install
@@ -24,13 +22,11 @@ pipeline {
         }
         stage('Test') {
             when{
-                allOf {
-                    branch 'feature/*'  
-                    changeRequest()
-                }
+                changeRequest()
+                
             }
             steps {
-                echo "Testing for pull request from branch:"
+                echo "Testing for pull request from branch"
                 sh '''
                 cd simple-frontend
                 npm --version
