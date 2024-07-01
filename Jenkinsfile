@@ -8,25 +8,57 @@ pipeline {
       
     stages {
         stage('Build') {
+            when{
+                allOf {
+                    branch '*/feature/*'  
+                    changeRequest()
+                }
+            }
             steps {
-                echo 'Building....'
-                sh '''
-                cd simple-frontend
-                npm install
-                '''
+                script {
+                def branchName = env.CHANGE_BRANCH
+                    if (branchName.startsWith('feature/')) {
+                        echo 'Building for pull request from branch: ${branchName}'
+                        sh '''
+                        cd simple-frontend
+                        npm install
+                        '''
+                    } else {
+                        echo "Skipping tests for pull request from branch: ${branchName}"
+                    }
+                }
+                
             }
         }
         stage('Test') {
+            when{
+                allOf {
+                    branch '*/feature/*'  
+                    changeRequest()
+                }
+            }
             steps {
-                echo "Testing.."
-                sh '''
-                cd simple-frontend
-                npm --version
-                npm test
-                '''
+                script {
+                def branchName = env.CHANGE_BRANCH
+                    if (branchName.startsWith('feature/')) {
+                        echo "Testing for pull request from branch: ${branchName}"
+                        sh '''
+                        cd simple-frontend
+                        npm --version
+                        npm test
+                        '''
+                    } else {
+                        echo "Skipping tests for pull request from branch: ${branchName}"
+                    }
+                }
+
+                
             }
         }
         stage('Build image'){
+            when{
+                branch 'staging'
+            }
             steps{
                 echo 'bulding docker image'
                 sh ''' 
@@ -37,6 +69,9 @@ pipeline {
         }
         stage('Push dockerhub')
         {
+            when{
+                branch 'staging'
+            }
             steps{
                 echo 'pushing to dockerhub'
                 withCredentials([usernamePassword(credentialsId: 'fbc65aa1-fe5a-4e2d-89c8-ec8fe49c1180', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
@@ -55,6 +90,22 @@ pipeline {
          }  
          success {  
              echo 'This will run only if successful'  
+
+             script {
+                def branchName = env.CHANGE_BRANCH
+                def prNumber = env.CHANGE_ID
+                
+                if (branchName.startsWith('feature/') && prNumber) {
+                    echo "Merging pull request #${prNumber} from branch ${branchName}"
+                    
+                    // Example using GitHub API to merge the pull request
+                    withCredentials([usernamePassword(credentialsId: '2178dedf-778c-4152-9edb-647d2d769f96', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD')]) {
+                        sh """
+                        curl -X PUT -u ${GITHUB_USERNAME}:${GITHUB_PASSWORD} https://api.github.com/repos/your-org/your-repo/pulls/${prNumber}/merge
+                        """
+                    }
+                }
+             }
          }  
          failure {  
             echo 'This will run only if failure'  
