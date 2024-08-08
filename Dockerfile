@@ -1,26 +1,28 @@
-FROM node:14-alpine AS build
-
-RUN apk add --update curl && \
-    rm -rf /var/cache/apk/*
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-COPY simple-frontend/package*.json ./
+COPY package*.json ./
 
-RUN npm install
+RUN npm install --silent
 
-COPY /simple-frontend .
-     
+COPY . .
+
 RUN npm run build
 
 
 
-FROM nginx:stable-alpine
+FROM nginx:mainline-alpine
 
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+COPY nginx/entrypoint.sh /usr/share/nginx/entrypoint.sh
+
+RUN chmod +x /usr/share/nginx/entrypoint.sh
 
 EXPOSE 80
 
+ENTRYPOINT ["/usr/share/nginx/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
