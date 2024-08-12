@@ -8,7 +8,7 @@ image:
   repository: sprysio/k-product-front
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: main-6d74249cf765a3712f2045d765060990092aa29e
+  tag: main-243ac7a0700239e218dffa9a9cb3a9e92da638ea
 
 imagePullSecrets: []
 nameOverride: ""
