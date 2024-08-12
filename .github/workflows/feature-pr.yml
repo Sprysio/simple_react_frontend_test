@@ -1,0 +1,29 @@
+name: Feature Branch CI
+
+on:
+  pull_request:
+    branches:
+      - 'feature/*'
+
+jobs:
+  lint_and_scan:
+    name: Linting and Vulnerability Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Lint Code
+        run: npm run lint
+
+      - name: Vulnerability Scanning
+        run: npm audit --audit-level=high
+
+      - name: Build
+        run: npm run build

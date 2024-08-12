@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-repo/myapp.git'
+    targetRevision: main
+    path: prod.charts
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: myapp-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
