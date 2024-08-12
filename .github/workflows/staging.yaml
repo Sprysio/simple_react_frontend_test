@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Update Helm values
       run: |
@@ -55,10 +55,10 @@ jobs:
     needs: update_values
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       
     - name: Checkout backend repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: sprysio/simple_spring_boot_backend_test
         path: backend
@@ -107,7 +107,7 @@ jobs:
     needs: testing
     if: failure()
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Reset Helm values to previous commit
       run: |
